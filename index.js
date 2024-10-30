@@ -43,7 +43,7 @@
     Your analysis goes here
     </scratchpad>
 
-    Based on your analysis, generate a page of content for novice learners in the <content> tag.
+    Based on your analysis, generate a page of content for novice learners in the <content> tag. Use markdown formatting for headings and bullets and code snippets with correct syntax highlighting as well.
 
     <content>
     [The page of content goes here]
@@ -60,8 +60,16 @@
     const result = await codioIDE.coachBot.ask({
       systemPrompt: systemPrompt,
       messages: messages
-    }, {preventMenu: true})
+    }, {stream: false, preventMenu: true})
 
+    codioIDE.coachBot.write(`Added a new page of content!! `)
+  
+    const startIndexScratchpad = result.result.indexOf("<scratchpad>") + "<scratchpad>".length;
+    const endIndexScratchpad = result.result.indexOf("</scratchpad>", startIndex);
+
+    const scratchpad = result.result.substring(startIndexScratchpad, endIndexScratchpad);
+    codioIDE.coachBot.write(`${scratchpad}`)
+    
     console.log(" result", result)
         const startIndex = result.result.indexOf("<content>") + "<content>".length;
         const endIndex = result.result.indexOf("</content>", startIndex);
@@ -72,7 +80,7 @@
             const page_res = await window.codioIDE.guides.structure.add({
                 title: "Generated Page", 
                 type: window.codioIDE.guides.structure.ITEM_TYPES.PAGE,
-                layout: window.codioIDE.guides.structure.LAYOUT.L_1_PANELS,
+                layout: window.codioIDE.guides.structure.LAYOUT.L_1_PANEL,
                 content: `${gen_content}`,
             })
             
@@ -80,7 +88,7 @@
         } catch (e) {
             console.error(e)
         }
-    
+    codioIDE.coachBot.write(`Added a new page of content!! `)
     codioIDE.coachBot.showMenu() 
   }
 // calling the function immediately by passing the required variables
