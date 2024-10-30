@@ -43,7 +43,11 @@
     Your analysis goes here
     </scratchpad>
 
-    Based on your analysis, generate a page of content for novice learners.
+    Based on your analysis, generate a page of content for novice learners in the <content> tag.
+
+    <content>
+    [The page of content goes here]
+    </content>
     `
 
     // Add user prompt to messages object
@@ -56,8 +60,28 @@
     const result = await codioIDE.coachBot.ask({
       systemPrompt: systemPrompt,
       messages: messages
-    })
+    }, {preventMenu: true})
+
+    console.log(" result", result)
+        const startIndex = result.result.indexOf("<content>") + "<content>".length;
+        const endIndex = result.result.indexOf("</content>", startIndex);
+
+        const gen_content = result.result.substring(startIndex, endIndex);
+
+        try {
+            const page_res = await window.codioIDE.guides.structure.add({
+                title: "Generated Page", 
+                type: window.codioIDE.guides.structure.ITEM_TYPES.PAGE,
+                layout: window.codioIDE.guides.structure.LAYOUT.L_1_PANELS,
+                content: `${gen_content}`,
+            })
+            
+            console.log('add item result', page_res) // returns added item: {id: '...', title: '...', type: '...', children: [...]}
+        } catch (e) {
+            console.error(e)
+        }
     
+    codioIDE.coachBot.showMenu() 
   }
 // calling the function immediately by passing the required variables
 })(window.codioIDE, window)
