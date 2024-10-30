@@ -49,7 +49,6 @@
     [The page of content goes here]
     </content>
     `
-
     // Add user prompt to messages object
     messages.push({
         "role": "user", 
@@ -65,29 +64,29 @@
     codioIDE.coachBot.write(`Added a new page of content!! `)
   
     const startIndexScratchpad = result.result.indexOf("<scratchpad>") + "<scratchpad>".length;
-    const endIndexScratchpad = result.result.indexOf("</scratchpad>", startIndex);
+    const endIndexScratchpad = result.result.indexOf("</scratchpad>", startIndexScratchpad);
 
     const scratchpad = result.result.substring(startIndexScratchpad, endIndexScratchpad);
     codioIDE.coachBot.write(`${scratchpad}`)
     
     console.log(" result", result)
-        const startIndex = result.result.indexOf("<content>") + "<content>".length;
-        const endIndex = result.result.indexOf("</content>", startIndex);
+    const startIndex = result.result.indexOf("<content>") + "<content>".length;
+    const endIndex = result.result.indexOf("</content>", startIndex);
 
-        const gen_content = result.result.substring(startIndex, endIndex);
+    const gen_content = result.result.substring(startIndex, endIndex);
 
-        try {
-            const page_res = await window.codioIDE.guides.structure.add({
-                title: "Generated Page", 
-                type: window.codioIDE.guides.structure.ITEM_TYPES.PAGE,
-                layout: window.codioIDE.guides.structure.LAYOUT.L_1_PANEL,
-                content: `${gen_content}`,
-            })
-            
-            console.log('add item result', page_res) // returns added item: {id: '...', title: '...', type: '...', children: [...]}
-        } catch (e) {
-            console.error(e)
-        }
+    try {
+        const page_res = await window.codioIDE.guides.structure.add({
+            title: "Generated Page", 
+            type: window.codioIDE.guides.structure.ITEM_TYPES.PAGE,
+            layout: window.codioIDE.guides.structure.LAYOUT.L_1_PANEL,
+            content: `${gen_content}`,
+        })
+        
+        console.log('add item result', page_res) // returns added item: {id: '...', title: '...', type: '...', children: [...]}
+    } catch (e) {
+        console.error(e)
+    }
     codioIDE.coachBot.write(`Added a new page of content!! `)
     codioIDE.coachBot.showMenu() 
   }
